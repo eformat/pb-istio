@@ -1,0 +1,38 @@
+---
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: my-mesh
+spec:
+  version: v2.0
+  security:
+    dataPlane:
+      mtls: true
+      automtls: true
+    controlPlane:
+      mtls: true
+  tracing:
+    type: Jaeger
+  addons:
+    jaeger:
+      name: jaeger
+      install:
+        storage:
+          type: Memory
+    grafana:
+      enabled: true
+    kiali:
+      name: kiali
+      enabled: true
+    prometheus:
+      enabled: true
+---
+apiVersion: maistra.io/v1
+kind: ServiceMeshMemberRoll
+metadata:
+  name: default
+spec:
+  members:
+    # a list of namespaces that should be joined into the service mesh
+    - popular-moviestore
+    - pet-battle
